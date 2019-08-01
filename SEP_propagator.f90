@@ -1,11 +1,6 @@
    program SEP_Propagate_1D
-
-   
+  
    !To add:
-   !1. species switch between electrons and protons
-   !2. Energy calculation
-   !3. change between time+profiles
-   
    
   IMPLICIT NONE
   
@@ -15,30 +10,36 @@
  ! Z_max = maximum extent of the Z-axis
  
   INTEGER, PARAMETER :: N = 200, M = 99, Z_max = 5
-  INTEGER :: i,j, zlimiter, mulimiter, z_index, species, writer(5)
+  INTEGER :: i,j, zlimiter, mulimiter, z_index, species, writer(5), injection_swtich
   REAL :: Delta_t, Delta_z, Delta_mu, CFL_coeff, V_sw, D_mumu_max, D_mumu(N,M)
   REAL :: Z(N), MU(M), time, totaltime, L_max, anisotropy, D_mumu_dmu(N,M)
-  REAL :: f(N,M), f0(N,M), f00(N,M), L(N), f_omni_direc, time_printer
-  REAL :: A(M), B(N,M), speed, left_lim, right_lim, limiter, B_max
-  REAL :: energy, lambda, times(5), pitch_angle_distribution(5,M)
+  REAL :: f(N,M), f0(N,M), f00(N,M), L(N), f_omni_direc, time_printer, acceleration_time
+  REAL :: A(M), B(N,M), speed, left_lim, right_lim, limiter, B_max, r_printer, escape_time
+  REAL :: energy, lambda, times(5), pitch_angle_distribution(5,M), r_position
 
 ! lambda = value of the effective radial mean-free-path, lambda_rr
 ! energy = energy of the mono-energetic SEP distribution in MeV
-! species = a way to switch between electrons (species = 0) and protons (species = 1)
-  lambda = 0.3
-  energy = 0.1
-  !species = 0
+  lambda = 0.3 !in AU
+  energy = 0.01 !MeV
+! species = a way to switch between electrons (species = 1) and protons (species = 2)  
+  species = 1
+! r_position is the radial position at which the solution is needed
+  r_position = 1. !AU
 ! The total time in [h] that the code should compute
-  totaltime = 10.
+  totaltime = 10. !in hours
 ! V_sw is the solar wind speed in km/s
-  V_sw = 400.
+  V_sw = 400. !in km/s
 ! The different times (in hours) where the pitch-angle distribution should be printed out at 1AU
   times(1) = 2.5
   times(2) = 3.5
   times(3) = 4.5
   times(4) = 5.5
   times(5) = 6.5
-
+! For a delta-function in time, injection_swtich = 1. For time-dependent injection, injection_swtich = 2
+! Time-dependent injection, a Reid-Axford profile is used with the following acceleration and escape times
+  injection_swtich = 1
+  acceleration_time = 0.1 !in hrs
+  escape_time = 1. !in hrs
 ! setting up the write flag
   DO i = 1, 5
     writer(i) = 0
@@ -53,8 +54,9 @@
 
 OPEN(500,file='grid_z.txt',status='unknown')
 OPEN(600,file='grid_mu.txt',status='unknown')
-OPEN(700,file='output_at_1AU.txt',status='unknown')
+OPEN(700,file='output.txt',status='unknown')
 OPEN(400,file='pitch_angle_distribution.txt',status='unknown')
+OPEN(666,file='model_setup.txt',status='unknown')
 
  ! initiate the grids  
  Delta_z = REAL(Z_max)/(REAL(N) - 1)
@@ -85,7 +87,8 @@ OPEN(400,file='pitch_angle_distribution.txt',status='unknown')
  END DO
  
  !--------------------------------------------------------
- ! Apply the initial conditions
+ ! Apply the initial conditions for time-independent injection
+   IF (injection_swtich.EQ.1) THEN
  
  DO i = 1, N
  
@@ -101,6 +104,7 @@ OPEN(400,file='pitch_angle_distribution.txt',status='unknown')
     
   END DO
  
+ END IF
 !--------------------------------------------------------
 ! Define the coefficients and time step.
 ! The time step is calculated from the CFL condition to keep the numerical scheme
@@ -110,7 +114,7 @@ OPEN(400,file='pitch_angle_distribution.txt',status='unknown')
 ! D_mumu is the pitch-angle diffusion coefficient and is z and mu dependent
 ! The units of D_mumu is [1/h]
  
- CALL DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energy,lambda,species,V_sw)
+ CALL DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energy,lambda,species,V_sw,r_position,r_printer)
  
  L_max = MAXVAL(L)
  
@@ -134,7 +138,33 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
 !3 = superbee
  zlimiter = 2
  mulimiter = 2
-!--------------------------------------------------------
+
+ !-------------------------------------------------------
+ ! Write code set-up to file
+ WRITE(666,*) lambda 
+ WRITE(666,*) energy
+ WRITE(666,*) species
+ WRITE(666,*) injection_swtich
+ WRITE(666,*) V_sw
+ 
+  IF (injection_swtich.EQ.2) THEN
+ 
+   WRITE(666,*) acceleration_time
+   WRITE(666,*) escape_time
+  
+  ELSE
+  
+   WRITE(666,*) 0.
+   WRITE(666,*) 0.
+  
+  ENDIF
+  
+ WRITE(666,*) N 
+ WRITE(666,*) M
+ WRITE(666,*) Z_max
+ WRITE(666,*) mulimiter
+ WRITE(666,*) zlimiter
+ !--------------------------------------------------------
  ! Do the iteration
 
  WRITE(*,*) 'Start the iteration...'
@@ -145,6 +175,37 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
  DO WHILE (time.LT.totaltime)
  
  time = time + Delta_t
+ !======================================================
+ !The option of a time-dependent injection profiles
+ 
+  IF (injection_swtich.EQ.2) THEN
+ 
+ DO i = 1, N
+ 
+    DO j = 1, M
+    
+    f(i,j) = 0.0
+    f00(i,j) = 0.0
+     
+    END DO
+    
+   END DO
+  
+   DO i = 1, N
+ 
+    DO j = 1, M
+    
+    ! This small Gaussian approximates a delta-like injecion in space
+    f0(i,j) = 100.*exp(-(Z(i) - 0.05)*(Z(i) - 0.05)/0.0005)/time*exp(-acceleration_time/time - time/escape_time)
+ 
+     
+    END DO
+    
+  END DO
+ 
+  
+  END IF
+ 
  !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
  ! First step: Diffusion - A simple time forward Euler type numerical scheme
  
@@ -418,7 +479,7 @@ END DO !the loop over mu
    
    anisotropy = anisotropy/f_omni_direc
    
-   WRITE(700,"(4(ES18.8))") Z(z_index), time, f_omni_direc*Delta_mu, anisotropy
+   WRITE(700,"(5(ES18.8))") Z(z_index),r_position, time, f_omni_direc*Delta_mu, anisotropy
       
     DO i = 1, 5
       
@@ -455,26 +516,39 @@ END DO !the loop over mu
  CLOSE(600)
  CLOSE(700)
  CLOSE(400)
+ CLOSE(666)
  
  END
 
   !--------------------------------------------------------
-SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energy,lambda,species, V_sw)
+SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energy,lambda,species, V_sw,r_position,r_printer)
  
  IMPLICIT NONE
  
  INTEGER :: i,j, z_index, species, N, M
  REAL :: speed, L(N), Z(N), D_0, MU(M), B(N,M), D_mumu(N,M), D_mumu_dmu(N,M), A(M)
- REAL :: V_sw, Omega, R(N), SunBeta, r0, delta_r, test, integral, psi
- REAL :: energy, lambda, rigidity
+ REAL :: V_sw, Omega, R(N), SunBeta, r0, delta_r, test, integral, psi, beta
+ REAL :: energy, lambda, rigidity, r_position, r_printer, rest_energy
+ REAL, PARAMETER :: speed_of_light = 7.2 !in units of AU/hr
  
- V_sw = V_sw/1.5d8*60.*60
- Omega = 2.*3.14/25.4/24.
+ V_sw = V_sw/1.5d8*60.*60 !solar wind speed in AU/hr
+ Omega = 2.*3.14/25.4/24. !solar rotation rate in /AU
  
  SunBeta = Omega/V_sw
+  
+ IF (species.EQ.1) THEN
  
- ! The units of speed is [AU/h]
- speed = 0.6671
+  rest_energy = 0.51 !Electron rest mass in MeV
+ 
+ ELSE
+ 
+  rest_energy = 938.27 !Proton rest mass in MV
+ 
+ ENDIF
+ 
+ rigidity = SQRT(energy*(energy + 2.*rest_energy)) ! in MV
+ beta = rigidity/(energy + rest_energy)
+ speed = beta*speed_of_light
  
  delta_r = 0.0001
  
@@ -492,7 +566,7 @@ SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energ
     
     END DO
   
-  IF ((r0.GT.1.).AND.((r0 - 0.01).LT.1.)) THEN
+  IF ((r0.GT.r_position).AND.((r0 - 0.01).LT.r_position)) THEN
 ! Find the closest z values to r = 1 AU
     z_index = i
   
@@ -501,6 +575,8 @@ SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energ
   R(i) = r0
   
   END DO
+  
+  r_printer = R(z_index)
   
 ! L is the focussing length in units of [AU]
     DO i = 1, N
