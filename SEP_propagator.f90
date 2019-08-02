@@ -1,8 +1,20 @@
-   program SEP_Propagate_1D
-  
-   !To add:
-   
-  IMPLICIT NONE
+ program SEP_propagator
+
+! -----------------------------------------------------------------------------------
+! Solves the focused transport equation for one spatial dimension, i.e. the Roelof equation.
+! Developed and described by:
+! *Strauss & Fichnter (2015): https://ui.adsabs.harvard.edu/abs/2015ApJ...801...29S/abstract
+! *Strauss et al. (2018): https://ui.adsabs.harvard.edu/abs/2017SoPh..292...51S/abstract
+! *MSc thesis of PKN Heita "Numerical investigation of solar energetic particle transport between 
+! the Sun, Earth, and Mars". North-West University, South Africa.
+
+! Email: dutoit.strauss@nwu.ac.za / dutoit.strauss@gmail.com
+! https://github.com/RDStrauss/SEP_propagator
+
+! To add in future:
+
+! -----------------------------------------------------------------------------------   
+ IMPLICIT NONE
   
  ! Initiate parameter
  ! N = number of grid cells in Z-direction, default, N = 200
@@ -177,10 +189,9 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
  time = time + Delta_t
  !======================================================
  !The option of a time-dependent injection profiles
+ IF (injection_swtich.EQ.2) THEN
  
-  IF (injection_swtich.EQ.2) THEN
- 
- DO i = 1, N
+  DO i = 1, N
  
     DO j = 1, M
     
@@ -197,15 +208,12 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
     
     ! This small Gaussian approximates a delta-like injecion in space
     f0(i,j) = 100.*exp(-(Z(i) - 0.05)*(Z(i) - 0.05)/0.0005)/time*exp(-acceleration_time/time - time/escape_time)
- 
-     
+      
     END DO
     
-  END DO
- 
-  
+   END DO
+   
   END IF
- 
  !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
  ! First step: Diffusion - A simple time forward Euler type numerical scheme
  
@@ -221,7 +229,6 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
   END DO
 
 !Update the older f's and boundary conditions
-
    DO i = 1, N
 
 ! Conservation of diffusive flux as boundary condition
@@ -351,12 +358,10 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
      END DO
   
   END IF !If for sign of convection speed test
-
     
   END DO !the loop over mu
 
 !Update the older f's and boundary conditions
-
    DO i = 1, N
 
     DO j = 1, M
@@ -370,7 +375,6 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
     END DO
     
   END DO 
-
  !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
  ! Third step: Focussing - upwind scheme + flux delimiter
  ! Same numerical scheme as used to advect in z-direction
@@ -519,8 +523,7 @@ END DO !the loop over mu
  CLOSE(666)
  
  END
-
-  !--------------------------------------------------------
+!--------------------------------------------------------
 SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energy,lambda,species, V_sw,r_position,r_printer)
  
  IMPLICIT NONE
@@ -567,8 +570,8 @@ SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energ
     END DO
   
   IF ((r0.GT.r_position).AND.((r0 - 0.01).LT.r_position)) THEN
-! Find the closest z values to r = 1 AU
-    z_index = i
+! Find the closest z values to r = r_position
+  z_index = i
   
   ENDIF
   
@@ -651,5 +654,4 @@ SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energ
  RETURN
  
  END
- 
- !----------------------------------------------------
+!----------------------------------------------------
