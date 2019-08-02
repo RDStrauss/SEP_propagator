@@ -80,7 +80,7 @@ subplot1.plot(mu, pitch_angle_distribution[3,:]/np.max(pitch_angle_distribution[
 
 s = 't = ' + str(round(times[4],1)) + ' hr'
 subplot1.plot(mu, pitch_angle_distribution[4,:]/np.max(pitch_angle_distribution[4,:]), color = 'green', linestyle = '-', label = s)
-plt.legend()
+plt.legend(fontsize = 8)
 
 subplot1 = fig.add_subplot(224)
 subplot1.set_xlim([-1,1])
