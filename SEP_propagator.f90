@@ -21,20 +21,20 @@
  ! M = number of grd cells in pitch-angle space, default, M = 99 (has to be an odd number)
  ! Z_max = maximum extent of the Z-axis
  
-  INTEGER, PARAMETER :: N = 200, M = 99, Z_max = 5
+  INTEGER, PARAMETER :: N = 100, M = 49
   INTEGER :: i,j, zlimiter, mulimiter, z_index, species, writer(5), injection_swtich
   REAL :: Delta_t, Delta_z, Delta_mu, CFL_coeff, V_sw, D_mumu_max, D_mumu(N,M)
-  REAL :: Z(N), MU(M), time, totaltime, L_max, anisotropy, D_mumu_dmu(N,M)
+  REAL :: Z(N), MU(M), time, totaltime, L_max, anisotropy, D_mumu_dmu(N,M), Z_max = 3
   REAL :: f(N,M), f0(N,M), f00(N,M), L(N), f_omni_direc, time_printer, acceleration_time
   REAL :: A(M), B(N,M), speed, left_lim, right_lim, limiter, B_max, r_printer, escape_time
   REAL :: energy, lambda, times(5), pitch_angle_distribution(5,M), r_position
 
 ! lambda = value of the effective radial mean-free-path, lambda_rr
 ! energy = energy of the mono-energetic SEP distribution in MeV
-  lambda = 0.3 !in AU
-  energy = 0.01 !MeV
+  lambda = 0.1 !in AU
+  energy = 1000. !MeV
 ! species = a way to switch between electrons (species = 1) and protons (species = 2)  
-  species = 1
+  species = 2
 ! r_position is the radial position at which the solution is needed
   r_position = 1. !AU
 ! The total time in [h] that the code should compute
@@ -71,7 +71,7 @@ OPEN(400,file='pitch_angle_distribution.txt',status='unknown')
 OPEN(666,file='model_setup.txt',status='unknown')
 
  ! initiate the grids  
- Delta_z = REAL(Z_max)/(REAL(N) - 1)
+ Delta_z = Z_max/(REAL(N) - 1)
  Delta_mu = 2./REAL(M)
 
  Z(1) = 0.05
@@ -468,7 +468,7 @@ END DO !the loop over mu
     DO j = 1, M
 
 ! integrate the distribution function to find the omni-directional intensity
-    f_omni_direc = f_omni_direc + f(z_index,j) + 0.001
+    f_omni_direc = f_omni_direc + f(z_index,j) + 0.0001
 
    END DO
  
@@ -477,7 +477,7 @@ END DO !the loop over mu
      DO j = 1, M
      
 ! integrate the distribution function * mu to find the omni-directional intensity    
-    anisotropy = anisotropy + 3.*(f(z_index,j) + 0.001)*MU(j)
+    anisotropy = anisotropy + 3.*(f(z_index,j) + 0.0001)*MU(j)
 
    END DO
    

@@ -10,9 +10,9 @@ anisotropy = data[:,4]
 z = data[0,0]
 r = data[0,1]
 
-times = np.zeros(5)
-pitch_angle_distribution = np.zeros((5,99))
 data = np.loadtxt("pitch_angle_distribution.txt")
+times = np.zeros(5)
+pitch_angle_distribution = np.zeros((5,len(data[:,2])))
 mu = data[:,0]
 times[0] = data[0,1]
 times[1] = data[0,3]
@@ -105,6 +105,8 @@ M = data[8]
 Z_max = data[9]
 mulimiter = data[10]
 zlimiter = data[11]
+
+V_sw = V_sw*1.5e8/60./60.
 
 s = '$\lambda$ = ' + str(round(lambdas,3)) + ' AU;' + ' E = ' + str(round(energy,3)) + ' MeV'
 plt.text(-0.9, 0.25, s)
