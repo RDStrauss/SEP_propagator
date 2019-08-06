@@ -100,15 +100,24 @@ OPEN(666,file='model_setup.txt',status='unknown')
  
  !--------------------------------------------------------
  ! Apply the initial conditions for time-independent injection
-   IF (injection_swtich.EQ.1) THEN
- 
- DO i = 1, N
+
+   DO i = 1, N
  
     DO j = 1, M
     
     f(i,j) = 0.0
     f00(i,j) = 0.0
+     
+    END DO
     
+   END DO
+ 
+ IF (injection_swtich.EQ.1) THEN
+ 
+ DO i = 1, N
+ 
+    DO j = 1, M
+
     ! This small Gaussian approximates a delta-like injecion in space
     f0(i,j) = 100.*exp(-(Z(i) - 0.05)*(Z(i) - 0.05)/0.0005)
     
@@ -191,23 +200,13 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
  !The option of a time-dependent injection profiles
  IF (injection_swtich.EQ.2) THEN
  
-  DO i = 1, N
  
-    DO j = 1, M
-    
-    f(i,j) = 0.0
-    f00(i,j) = 0.0
-     
-    END DO
-    
-   END DO
-  
    DO i = 1, N
  
     DO j = 1, M
     
     ! This small Gaussian approximates a delta-like injecion in space
-    f0(i,j) = 100.*exp(-(Z(i) - 0.05)*(Z(i) - 0.05)/0.0005)/time*exp(-acceleration_time/time - time/escape_time)
+    f0(i,j) = f0(i,j) + 100.*exp(-(Z(i) - 0.05)*(Z(i) - 0.05)/0.0005)/time*exp(-acceleration_time/time - time/escape_time)
       
     END DO
     
