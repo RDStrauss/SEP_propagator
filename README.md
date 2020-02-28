@@ -1,4 +1,6 @@
 # SEP_propagator
+# For details see van den Berg et al., 2020: ArXiv link: xxx.xxx.xx
+
 1D solar energetic particle (SEP) transport model
 
 To compile the code use either the Intel Fortran compiler with
