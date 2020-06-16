@@ -40,7 +40,7 @@ The output files are as follows:
 
 The examples include two figures presented in *van den Berg et al. [2020]* to show case how the model works. The first example (Figure 12) is a fitting of the model to an SEP event and also includes an example of how the code can be used to calculate the ratio of particles propagating away from and towards the Sun at the observation point. The second example (Figure 21) illustrates how the solution behaves if the mean free path and acceleration or injection time is changed.
 
-## Disclosure and Copy Write
+## Disclosure and Notice
 
 The  code  is published under the Creative Commons license, but is not intended to be used for commercial applications. We ask anyone using this model to reference *van den Berg et al. [2020]* in all research outputs and to contact the authors when used extensively.
 
