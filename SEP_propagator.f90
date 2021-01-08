@@ -568,7 +568,7 @@ SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energ
     
     END DO
   
-  IF ((r0.GT.r_position).AND.((r0 - 0.01).LT.r_position)) THEN
+  IF ((r0.GT.r_position).AND.((r0 - 0.025).LT.r_position)) THEN
 ! Find the closest z values to r = r_position
   z_index = i
   
