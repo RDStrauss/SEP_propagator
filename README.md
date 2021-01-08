@@ -2,7 +2,7 @@
 
 This is a 1D solar energetic particle (SEP) transport model. The focused transport equation for the coordinate along a magnetic field line is solved with a finite difference scheme.
 
-For details see *van den Berg et al. [2020], Space Science Reviews* (https://link.springer.com/article/10.1007/s11214-020-00771-x) (ArXiv link: xxx.xxx.xx) and the references *[Strauss & Fichnter, 2015; Strauss et al., 2018; Heita, 2019]*.
+For details see *van den Berg et al. [2020], Space Science Reviews* (https://link.springer.com/article/10.1007/s11214-020-00771-x) (ArXiv link: https://arxiv.org/abs/2012.07570) and the references *[Strauss & Fichnter, 2015; Strauss et al., 2018; Heita, 2019]*.
 
 ## Using SEP_propagator
 
@@ -52,4 +52,4 @@ The  code  is published under the Creative Commons license, but is not intended 
 
 [Strauss, R.D., Ogunjobi, O., Moraal, H., McCracken, K.G., and Caballero-Lopez, R.A. 2018. On the pulse shape of ground-level enhancements. *Solar Physics*, 292(4): 51.](https://ui.adsabs.harvard.edu/abs/2017SoPh..292...51S/abstract)
 
-van den Berg, J.P., Strauss, R.D., and Effenberger, F. 2020. A primer on focused solar energetic particle transport. *Space Science Reviews*, ?: ?.
+van den Berg, J.P., Strauss, R.D., and Effenberger, F. 2020. A primer on focused solar energetic particle transport. *Space Science Reviews*, https://link.springer.com/article/10.1007/s11214-020-00771-x
