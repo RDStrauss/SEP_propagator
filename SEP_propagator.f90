@@ -11,10 +11,8 @@
 ! Email: dutoit.strauss@nwu.ac.za / dutoit.strauss@gmail.com
 ! https://github.com/RDStrauss/SEP_propagator
 
-! To add in future:
+! To add/fix in future:
 
-! Permanently fix the magnetic coordinate to radial coordinate transformation by using
-! analytical approach as opposed to numerical approach currently implemented.
 ! -----------------------------------------------------------------------------------   
  IMPLICIT NONE
   
@@ -38,7 +36,7 @@
 ! species = a way to switch between electrons (species = 1) and protons (species = 2)  
   species = 2
 ! r_position is the radial position at which the solution is needed
-  r_position = 1. !AU
+  r_position = 0.1 !AU
 ! The total time in [h] that the code should compute
   totaltime = 10. !in hours
 ! V_sw is the solar wind speed in km/s
@@ -529,11 +527,12 @@ SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energ
  
  IMPLICIT NONE
  
- INTEGER :: i,j, z_index, species, N, M
+ INTEGER :: i,j, z_index, species, N, M, temp(N)
  REAL :: speed, L(N), Z(N), D_0, MU(M), B(N,M), D_mumu(N,M), D_mumu_dmu(N,M), A(M)
  REAL :: V_sw, Omega, R(N), SunBeta, r0, delta_r, test, integral, psi, beta
  REAL :: energy, lambda, rigidity, r_position, r_printer, rest_energy
  REAL, PARAMETER :: speed_of_light = 7.2 !in units of AU/hr
+ REAL :: min_vector(N) ! vector used to minimize difference to find index of r_position
  
  V_sw = V_sw/1.5d8*60.*60 !solar wind speed in AU/hr
  Omega = 2.*3.14/25.4/24. !solar rotation rate in /AU
@@ -570,15 +569,26 @@ SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energ
     
     END DO
   
-  IF ((r0.GT.r_position).AND.((r0 - 0.025).LT.r_position)) THEN
+! Replaced with minimization routine below
+!  IF ((r0.GT.r_position).AND.((r0 - 0.025).LT.r_position)) THEN
 ! Find the closest z values to r = r_position
-  z_index = i
-  
-  ENDIF
+!  z_index = i
+!  ENDIF
   
   R(i) = r0
   
   END DO
+  
+! Minimization to find the closest radial point to r_position
+  DO i = 1, N
+  
+    min_vector(i) = (R(i) - r_position)*(R(i) - r_position)
+  
+  END DO
+  
+  temp = MINLOC(min_vector)
+  
+  z_index = temp(1)
   
   r_printer = R(z_index)
   
