@@ -2,7 +2,7 @@
 
 This is a 1D solar energetic particle (SEP) transport model. The focused transport equation for the coordinate along a magnetic field line is solved with a finite difference scheme.
 
-For details see *van den Berg et al. [2020]* (ArXiv link: xxx.xxx.xx) and the references *[Strauss & Fichnter, 2015; Strauss et al., 2018; Heita, 2019]*.
+For details see *van den Berg et al. [2020], Space Science Reviews* (https://link.springer.com/article/10.1007/s11214-020-00771-x) (ArXiv link: xxx.xxx.xx) and the references *[Strauss & Fichnter, 2015; Strauss et al., 2018; Heita, 2019]*.
 
 ## Using SEP_propagator
 
