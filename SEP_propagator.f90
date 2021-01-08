@@ -36,7 +36,7 @@
 ! species = a way to switch between electrons (species = 1) and protons (species = 2)  
   species = 2
 ! r_position is the radial position at which the solution is needed
-  r_position = 0.1 !AU
+  r_position = 1.0 !AU
 ! The total time in [h] that the code should compute
   totaltime = 10. !in hours
 ! V_sw is the solar wind speed in km/s
