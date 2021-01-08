@@ -13,6 +13,8 @@
 
 ! To add in future:
 
+! Permanently fix the magnetic coordinate to radial coordinate transformation by using
+! analytical approach as opposed to numerical approach currently implemented.
 ! -----------------------------------------------------------------------------------   
  IMPLICIT NONE
   
