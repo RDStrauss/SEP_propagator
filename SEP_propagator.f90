@@ -12,7 +12,7 @@
 ! https://github.com/RDStrauss/SEP_propagator
 
 ! To add/fix in future:
-
+! Need to fix typo in CFL timestep determinnation. Should be MINVAL(L), not MAXVAL(L)!
 ! -----------------------------------------------------------------------------------   
  IMPLICIT NONE
   
