@@ -44,6 +44,10 @@ The examples include two figures presented in *van den Berg et al. [2020]* to sh
 
 The  code  is published under the Creative Commons license, but is not intended to be used for commercial applications. We ask anyone using this model to reference *van den Berg et al. [2020]* in all research outputs and to contact the authors when used extensively.
 
+## Changes to be implemented
+
+-- Integral over pitch-angle dependence of Duu should be re-done with a finer u-grid!
+
 ## References
 
 [Heita, P.K.N. 2019. Numerical investigation of solar energetic particle transport between the Sun, Earth, and Mars. *MSc thesis*. North-West University, South Africa.](https://dspace.nwu.ac.za/handle/10394/33865)
