@@ -14,7 +14,7 @@ There are a few parameters in the Fortran90 code which can be changed:
 - `totaltime`: The time the simulation must be computed for in hours.
 - `V_sw`: The solar wind speed in km/s.
 - `times`: An array with the times in hours when the pitch-angle distribution at the observation point should be printed out.
-- `injection_swtich`: 1 for a delta or 2 for a Reid-Axford injection in time. For the Reid-Axford profile, there is also an `acceleration_time` and `escape_time` in hours to control its shape.
+- `injection_switch`: 1 for a delta or 2 for a Reid-Axford injection in time. For the Reid-Axford profile, there is also an `acceleration_time` and `escape_time` in hours to control its shape.
 
 To compile the Fortran90 code, use either the Intel Fortran compiler with
 ```
@@ -32,9 +32,9 @@ python plot_output.py
 The output files are as follows:
 - `grid_z.txt`: Values of the spatial grid.
 - `grid_mu.txt`: Values of the pitch-angle grid.
-- `output.txt`: Output at the observation point. The columns contains the value of the z-grid correspnding to the observation point in AU, the radial distance of the observation point in AU, the time in hours, the omni-directional intensity, and the anisotropy.
-- `pitch_angle_distribution.txt`: The pich-angle distribution at the observation point at different times. The first column contains the pitch-angle grid points, and then the columns alternate between the time and the pitch-angle distribution.
-- `model_setup.txt`: The model setup for future reference. The parameters included, in order, are `lambda`, `energy`, `species`, `injection_swtich`, `V_sw`, `acceleration_time`, `escape_time`, `N`, `M`, `Z_max`, `mulimiter`, and `zlimiter`. The last 5 parameters are technical parameters needed in the numerical scheme, *which should only be changed if you have experience with the numerical scheme*. `N` is the number of position grid points, `M` is the number of pitch-angle grid points, `Z_max` is the outer simulation boundary, and `mulimiter` and `zlimiter` are flux limiters.
+- `output.txt`: Output at the observation point. The columns contain the value of the z-grid corresponding to the observation point in AU, the radial distance of the observation point in AU, the time in hours, the omni-directional intensity, and the anisotropy.
+- `pitch_angle_distribution.txt`: The pitch-angle distribution at the observation point at different times. The first column contains the pitch-angle grid points, and then the columns alternate between the time and the pitch-angle distribution.
+- `model_setup.txt`: The model setup for future reference. The parameters included, in order, are `lambda`, `energy`, `species`, `injection_switch`, `V_sw`, `acceleration_time`, `escape_time`, `N`, `M`, `Z_max`, `mulimiter`, and `zlimiter`. The last 5 parameters are technical parameters needed in the numerical scheme, *which should only be changed if you have experience with the numerical scheme*. `N` is the number of position grid points, `M` is the number of pitch-angle grid points, `Z_max` is the outer simulation boundary, and `mulimiter` and `zlimiter` are flux limiters.
 
 ## Examples
 
