@@ -12,7 +12,7 @@
 ! https://github.com/RDStrauss/SEP_propagator
 
 ! To add/fix in future:
-! Need to fix typo in CFL timestep determinnation. Should be MINVAL(L), not MAXVAL(L)!
+! 
 ! -----------------------------------------------------------------------------------   
  IMPLICIT NONE
   
@@ -137,11 +137,11 @@ OPEN(666,file='model_setup.txt',status='unknown')
  
  CALL DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energy,lambda,species,V_sw,r_position,r_printer)
  
- L_max = MAXVAL(L)
+ L_max = MINVAL(L) ! The minimun value of the focusing length
  
- D_mumu_max = MAXVAL(D_mumu)!maximum value of D_mumu and used for CFL calculation
+ D_mumu_max = MAXVAL(D_mumu) ! maximum value of D_mumu and used for CFL calculation
  
- B_max = speed/2./L_max!maximum value of the focussing coefficient, used in CFL calculation
+ B_max = speed/2./L_max ! maximum value of the focussing coefficient, used in CFL calculation
  
 ! The CFL cofficients is a parameter that must be between (0,1)
  CFL_coeff = 1.
