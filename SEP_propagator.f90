@@ -106,6 +106,7 @@ OPEN(666,file='model_setup.txt',status='unknown')
     DO j = 1, M
     
     f(i,j) = 0.0
+    f0(i,j) = 0.0
     f00(i,j) = 0.0
      
     END DO
