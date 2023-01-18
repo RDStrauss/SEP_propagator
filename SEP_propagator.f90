@@ -261,7 +261,11 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
       f(i,j) = f0(i,j) - Delta_t/Delta_z*(A(j)*f0(i,j) - A(j)*f0(i-1,j))/2.
 	      
     END DO
-     
+
+    !Apply boundary conditions
+    f(1,j) = f0(1,j) - Delta_t/Delta_z*A(j)*f0(1,j)/2.
+    f(N,j) = f0(N,j) + Delta_t/Delta_z*A(j)*f0(N - 1,j)/2.
+    
     DO i = 2, N - 1 !Apply the flux limiter on the half-step fluxes
         
 	  left_lim = (A(j)*f(i,j) - A(j)*f(i-1,j))/2.
@@ -298,8 +302,11 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
 	f00(i,j) = A(j)*f(i,j) + limiter !apply the limiter, i.e. correct the flux !NOTE: here f00 is a flux, while f and f0 are intensities
 	        
      END DO
-    
-     DO i = 2, N - 1
+
+     f00(1,j) = A(j)*f(1,j) + 0.
+     f00(N,j) = A(j)*f(N,j) + 0.
+     
+     DO i = 2, N
             
 	f(i,j) = f0(i,j) - Delta_t/Delta_z*(f00(i,j) - f00(i-1,j)) !Do a full time step usin the upwind scheme and the flux corrected values
           
@@ -313,6 +320,10 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
       f(i,j) = f0(i,j) - Delta_t/Delta_z*(A(j)*f0(i+1,j) - A(j)*f0(i,j))/2.
 	      
     END DO
+    
+    !Apply boundary conditions
+    f(1,j) = f0(1,j) + Delta_t/Delta_z*A(j)*f0(2,j)/2.
+    f(N,j) = f0(N,j) - Delta_t/Delta_z*A(j)*f0(N,j)/2.
      
     DO i = 2, N - 1 !Apply the flux limiter on the hafl-step fluxes
         
@@ -350,8 +361,11 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
 	f00(i,j) = A(j)*f(i,j) + limiter !apply the limiter
 	        
      END DO
+     
+     f00(1,j) = A(j)*f(1,j) + 0.
+     f00(N,j) = A(j)*f(N,j) + 0.
     
-     DO i = 2, N - 1
+     DO i = 1, N - 1
             
 	f(i,j) = f0(i,j) - Delta_t/Delta_z*(f00(i+1,j) - f00(i,j)) !Do the full time step
           
@@ -367,15 +381,15 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
     DO j = 1, M
     
     !Boundaries for z
-  f(1,j) = f(2,j)
-  f(N,j) = f(N - 1,j)
+  !f(1,j) = f(2,j)
+  !f(N,j) = f(N - 1,j)
     
     f0(i,j) = f(i,j) !Update f^t-1
             
     END DO
     
   END DO 
- !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
  ! Third step: Focussing - upwind scheme + flux delimiter
  ! Same numerical scheme as used to advect in z-direction
   
