@@ -23,11 +23,11 @@
  
   INTEGER, PARAMETER :: N = 100, M = 49
   INTEGER :: i,j, zlimiter, mulimiter, z_index, species, writer(5), injection_swtich
-  REAL :: Delta_t, Delta_z, Delta_mu, CFL_coeff, V_sw, D_mumu_max, D_mumu(N,M)
-  REAL :: Z(N), MU(M), time, totaltime, L_max, anisotropy, D_mumu_dmu(N,M), Z_max = 3
-  REAL :: f(N,M), f0(N,M), f00(N,M), L(N), f_omni_direc, time_printer, acceleration_time
-  REAL :: A(M), B(N,M), speed, left_lim, right_lim, limiter, B_max, r_printer, escape_time
-  REAL :: energy, lambda, times(5), pitch_angle_distribution(5,M), r_position
+  REAL(KIND=8) :: Delta_t, Delta_z, Delta_mu, CFL_coeff, V_sw, D_mumu_max, D_mumu(N,M)
+  REAL(KIND=8) :: Z(N), MU(M), time, totaltime, L_max, anisotropy, D_mumu_dmu(N,M), Z_max = 3
+  REAL(KIND=8) :: f(N,M), f0(N,M), f00(N,M), L(N), f_omni_direc, time_printer, acceleration_time
+  REAL(KIND=8) :: A(M), B(N,M), speed, left_lim, right_lim, limiter, B_max, r_printer, escape_time
+  REAL(KIND=8) :: energy, lambda, times(5), pitch_angle_distribution(5,M), r_position
 
 ! lambda = value of the effective radial mean-free-path, lambda_rr
 ! energy = energy of the mono-energetic SEP distribution in MeV
@@ -145,7 +145,7 @@ OPEN(666,file='model_setup.txt',status='unknown')
  B_max = speed/2./L_max ! maximum value of the focussing coefficient, used in CFL calculation
  
 ! The CFL cofficients is a parameter that must be between (0,1)
- CFL_coeff = 1.
+ CFL_coeff = 0.9
 
 Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL_coeff*Delta_mu*Delta_mu/D_mumu_max/2.))
 
@@ -543,11 +543,11 @@ SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energ
  IMPLICIT NONE
  
  INTEGER :: i,j, z_index, species, N, M, temp(N)
- REAL :: speed, L(N), Z(N), D_0, MU(M), B(N,M), D_mumu(N,M), D_mumu_dmu(N,M), A(M)
- REAL :: V_sw, Omega, R(N), SunBeta, r0, delta_r, test, integral, psi, beta
- REAL :: energy, lambda, rigidity, r_position, r_printer, rest_energy
- REAL, PARAMETER :: speed_of_light = 7.2 !in units of AU/hr
- REAL :: min_vector(N) ! vector used to minimize difference to find index of r_position
+ REAL(KIND=8) :: speed, L(N), Z(N), D_0, MU(M), B(N,M), D_mumu(N,M), D_mumu_dmu(N,M), A(M)
+ REAL(KIND=8) :: V_sw, Omega, R(N), SunBeta, r0, delta_r, test, integral, psi, beta
+ REAL(KIND=8) :: energy, lambda, rigidity, r_position, r_printer, rest_energy
+ REAL(KIND=8), PARAMETER :: speed_of_light = 7.2 !in units of AU/hr
+ REAL(KIND=8) :: min_vector(N) ! vector used to minimize difference to find index of r_position
  
  V_sw = V_sw/1.5d8*60.*60 !solar wind speed in AU/hr
  Omega = 2.*3.14/25.4/24. !solar rotation rate in /AU
