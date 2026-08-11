@@ -207,7 +207,7 @@ Delta_t = MIN(abs(CFL_coeff*Delta_z/speed),abs(CFL_coeff*Delta_mu/B_max),abs(CFL
     DO j = 1, M
     
     ! This small Gaussian approximates a delta-like injecion in space
-    f0(i,j) = f0(i,j) + 100.*exp(-(Z(i) - 0.05)*(Z(i) - 0.05)/0.0005)/time*exp(-acceleration_time/time - time/escape_time)
+    f0(i,j) = f0(i,j) + 100.*exp(-(Z(i) - 0.05)*(Z(i) - 0.05)/0.0005)/time*exp(-acceleration_time/time - time/escape_time)*Delta_t
       
     END DO
     
