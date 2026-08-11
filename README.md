@@ -48,6 +48,14 @@ The  code  is published under the Creative Commons license, but is not intended 
 
 -- Integral over pitch-angle dependence of Duu should be re-done with a finer u-grid!
 
+## Numerical grid convergence studies
+
+For such studies, please see the closed issue:
+
+https://github.com/RDStrauss/SEP_propagator/issues/4
+
+Of importance is the placement of the inner, time-dependent, boundary condition and whether only the tail of teh distribution is sampled when the Gaussian widht is chosen too small.
+
 ## References
 
 [Heita, P.K.N. 2019. Numerical investigation of solar energetic particle transport between the Sun, Earth, and Mars. *MSc thesis*. North-West University, South Africa.](https://dspace.nwu.ac.za/handle/10394/33865)
