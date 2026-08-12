@@ -54,7 +54,7 @@ For such studies, please see the closed issue:
 
 https://github.com/RDStrauss/SEP_propagator/issues/4
 
-Of importance is the placement of the inner, time-dependent, boundary condition and whether only the tail of teh distribution is sampled when the Gaussian widht is chosen too small.
+Of importance is the placement of the inner, time-dependent, boundary condition and whether only the tail of the distribution is sampled when the Gaussian width is chosen too small.
 
 ## References
 
