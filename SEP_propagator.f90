@@ -70,11 +70,11 @@ OPEN(700,file='output.txt',status='unknown')
 OPEN(400,file='pitch_angle_distribution.txt',status='unknown')
 OPEN(666,file='model_setup.txt',status='unknown')
 
- ! initiate the grids  
- Delta_z = Z_max/(REAL(N) - 1)
- Delta_mu = 2./REAL(M)
-
+ ! initiate the grids 
  Z(1) = 0.05
+ 
+ Delta_z = (Z_max - Z(1))/(REAL(N) - 1)
+ Delta_mu = 2./REAL(M)
  
    WRITE(500,"(1(ES18.8))") Z(1)
    
@@ -476,7 +476,7 @@ END DO !the loop over mu
   
   WRITE(*,*) 'Time: ', time, ' of ', totaltime, ' hrs'
   
- time_printer = 0.
+ time_printer = time_printer - 0.01667
  f_omni_direc = 0.
     
     DO j = 1, M
@@ -546,11 +546,12 @@ SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energ
  REAL(KIND=8) :: speed, L(N), Z(N), D_0, MU(M), B(N,M), D_mumu(N,M), D_mumu_dmu(N,M), A(M)
  REAL(KIND=8) :: V_sw, Omega, R(N), SunBeta, r0, delta_r, test, integral, psi, beta
  REAL(KIND=8) :: energy, lambda, rigidity, r_position, r_printer, rest_energy
- REAL(KIND=8), PARAMETER :: speed_of_light = 7.2 !in units of AU/hr
+ REAL(KIND=8), PARAMETER :: speed_of_light = 7.2093d0 !in units of AU/hr
  REAL(KIND=8) :: min_vector(N) ! vector used to minimize difference to find index of r_position
+ REAL(KIND=8), PARAMETER :: PI = 3.14159
  
  V_sw = V_sw/1.5d8*60.*60 !solar wind speed in AU/hr
- Omega = 2.*3.14/25.4/24. !solar rotation rate in /AU
+ Omega = 2.*PI/25.4/24. !solar rotation rate in /AU
  
  SunBeta = Omega/V_sw
   
@@ -664,8 +665,8 @@ SUBROUTINE DEF_COEFFICIENTS(speed,N,L,Z,M,MU,B,D_mumu,D_mumu_dmu,A,z_index,energ
  
    END DO
     
-     D_mumu_dmu(i,1) = (D_mumu(i,1) - D_mumu(i,2))/ABS(MU(2) - MU(1))
-     D_mumu_dmu(i,M-1) = (D_mumu(i,M) - D_mumu(i,j-1))/ABS(MU(2) - MU(1))
+     D_mumu_dmu(i,1) = (D_mumu(i,2) - D_mumu(i,1))/ABS(MU(2) - MU(1))
+     D_mumu_dmu(i,M) = (D_mumu(i,M) - D_mumu(i,M-1))/ABS(MU(2) - MU(1))
  
   
  END DO
