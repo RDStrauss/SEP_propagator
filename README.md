@@ -36,6 +36,10 @@ The output files are as follows:
 - `pitch_angle_distribution.txt`: The pitch-angle distribution at the observation point at different times. The first column contains the pitch-angle grid points, and then the columns alternate between the time and the pitch-angle distribution.
 - `model_setup.txt`: The model setup for future reference. The parameters included, in order, are `lambda`, `energy`, `species`, `injection_switch`, `V_sw`, `acceleration_time`, `escape_time`, `N`, `M`, `Z_max`, `mulimiter`, and `zlimiter`. The last 5 parameters are technical parameters needed in the numerical scheme, *which should only be changed if you have experience with the numerical scheme*. `N` is the number of position grid points, `M` is the number of pitch-angle grid points, `Z_max` is the outer simulation boundary, and `mulimiter` and `zlimiter` are flux limiters.
 
+## SDE benchmark run
+
+Here, the model is compared to the SDE-based results of *Droge et al. [2010]* for 4 MeV protons using a delta-like injection
+
 ## Examples
 
 The examples include two figures presented in *van den Berg et al. [2020]* to show case how the model works. The first example (Figure 12) is a fitting of the model to an SEP event and also includes an example of how the code can be used to calculate the ratio of particles propagating away from and towards the Sun at the observation point. The second example (Figure 21) illustrates how the solution behaves if the mean free path and acceleration or injection time is changed.
