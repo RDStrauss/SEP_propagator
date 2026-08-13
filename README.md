@@ -38,7 +38,7 @@ The output files are as follows:
 
 ## SDE benchmark run
 
-Here, the model is compared to the SDE-based results of *Droge et al. [2010]* for 4 MeV protons using a delta-like injection
+This folder contains the model comparison with the SDE-based results of *Droge et al. [2010]* for 4 MeV protons using a delta-like injection
 
 ## Examples
 
